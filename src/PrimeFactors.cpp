@@ -1,45 +1,35 @@
 #include "PrimeFactors.h"
 
 PrimeFactors::PrimeFactors(uint64_t number) : number(number) {
-	factors.resize(number + 1);
 	Factorize();
 }
 void PrimeFactors::Factorize() {
 	uint64_t curr_number = number;
-	int probe = 2;
-	while (curr_number != 1) {
-		if (curr_number % probe != 0) {
-			++probe;
-		}
-		else {
+	int probe;
+	unsigned power;
+	for (probe = 2; probe <= curr_number; ++probe) {
+		power = 0;
+		while (curr_number % probe == 0) {
+			++power;
 			curr_number /= probe;
-			++factors[probe];
+		}
+		if (power != 0) {
+			factors.push_back(std::make_pair(probe, power));
 		}
 	}
-}
-
-bool PrimeFactors::IsCorrect() const {
-	uint64_t result = 0;
-	for (std::size_t i = 0, l = factors.size(); i != l; ++i) {
-		if (factors[i]) {
-			result = pow(i, factors[i]);
-		}
-	}
-	return number == result;
 }
 
 std::string PrimeFactors::ToString() const {
-	std::string result;
-	for (std::size_t i = 0, l = factors.size(); i != l; ++i) {
-		if (factors[i]) {
-			if (factors[i] == 1) {
-				result += " * " + std::to_string(i);
-			}
-			else {
-				result += " * " + std::to_string(i) + '^' + std::to_string(factors[i]);
-			}
+	uint64_t temp = 1;
+	std::string result(std::to_string(number) + " = 1");
+	unsigned l = factors.size();
+	for (unsigned i = 0; i != l; ++i) {
+		if (factors[i].second == 1) {
+			result += " * " + std::to_string(factors[i].first);
+		}
+		else {
+			result += " * " + std::to_string(factors[i].first) + '^' + std::to_string(factors[i].second);
 		}
 	}
-	result.erase(0, 3);
 	return result;
 }

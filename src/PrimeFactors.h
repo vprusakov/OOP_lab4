@@ -8,9 +8,9 @@ class PrimeFactors {
 public:
 	PrimeFactors(uint64_t);
 	void Factorize();
-	bool IsCorrect() const;
 	std::string ToString() const;
+	~PrimeFactors() = default;
 private:
 	const uint64_t number;
-	std::vector<unsigned int> factors;
+	std::vector<std::pair<int, unsigned> > factors;
 };
